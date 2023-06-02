@@ -4,7 +4,7 @@
 {% block content %}
     <main>
         <section class="main">
-            {% for sex in sex_list %}
+            {% for sex in sexes %}
                 <a href="{% url 'products' sex.short_name %}">
                     <h4 style="color: #222224;padding: 20px;margin: 10px;">
                         {{ sex.name }}

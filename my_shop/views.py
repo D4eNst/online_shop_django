@@ -1,6 +1,7 @@
+from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.views.generic import View, ListView
-from .models import Product, Sex, Category
+from .models import Product, Brand, Designer, ProductSize, Sex
 
 
 class MainView(View):
@@ -14,29 +15,74 @@ class ProductListView(ListView):
     template_name = 'my_shop/product_list.html'
     context_object_name = 'products'
 
-    categories = Category.objects.all()
-    sex = Category.objects.all()
+    category_name = None
+    sex_name = None
+    sizes = []
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = self.categories.get(slug=self.kwargs.get('category')).name
+        context['category_name'] = self.category_name
+        context['sex'] = Sex.objects.get(short_name=self.sex_name)
+        context['brands'] = Brand.objects.all()
+        context['designers'] = Designer.objects.all()
+        context['sizes'] = self.sizes
         return context
 
     def get_queryset(self):
-        return Product.objects.filter(category=self.categories.get(slug=self.kwargs.get('category')).pk,
-                                      sex=self.sex.get(short_name=self.kwargs.get('sex')).pk,
-                                      is_active=True)
+        self.category_name = self.kwargs.get('category')
+        self.sex_name = self.kwargs.get('sex')
+        self.sizes = list(
+            ProductSize.objects.filter(product__category__slug=self.category_name).values_list('size__name',
+                                                                                               flat=True).distinct()
+        )
+
+        # я как-то получаю фильтры и формурую из них словарь (значения по умолчанию должны быть False)
+        # макет весьма плох, я не знаю, как получить данные из фильтра
+        # можно было бы сделать кнопку "сохранить фильтр" которая передавала бы в get запросе выбранные пункты
+        # чтобы работала моя фильтрация, достаточно как раз получить от клиента необходимые списки:
+        size_list = []
+        brand = []
+        designer = []
+
+        search = 'winter'.lower().strip()
+
+        filters = {
+            'size_list': size_list,
+            'brand': brand,
+            'designer': designer,
+        }
+
+        queryset_filter = {
+            'title__icontains': search,
+            'category__slug': self.category_name,
+            'sex__short_name': self.sex_name,
+            'is_active': True,
+            'productsize__size__name__in': filters['size_list'] if filters['size_list'] else self.sizes,
+        }
+        for f, value in filters.items():
+            if value:
+                queryset_filter[f'{f}__name__in'] = value
+
+        return Product.objects.filter(
+            **queryset_filter
+        ).annotate(total_quantity=Sum('productsize__quantity')).filter(total_quantity__gt=0)
 
 
 def choose_sex(request):
-    sexs = Sex.objects.all()
-    print(sexs)
-    context = {
-        'sex_list': sexs,
-    }
-    return render(request, 'my_shop/choose_sex.html', context=context)
+    return render(request, 'my_shop/choose_sex.html')
 
 
 def product_redirect_view(request, sex):
     category = 'new-arrivals'
-    return redirect('product-list', sex='m', category=category)
+    return redirect('product-list', sex=sex, category=category)
+
+# from my_shop.models import *
+# c = Category.objects.prefetch_related('sex').all()
+# s = Sex.objects.all()
+# from django.db import *
+# connection.queries
+# for sex in s:
+#     print(sex.name)
+#     for category in c:
+#         if sex in category.sex.all():
+#             print(category.name)

@@ -43,7 +43,7 @@ class Sex(models.Model):
     class Meta:
         verbose_name = 'Пол'
         verbose_name_plural = 'Пол'
-        ordering = ['name', ]
+        ordering = ['id', ]
 
 
 class Category(models.Model):

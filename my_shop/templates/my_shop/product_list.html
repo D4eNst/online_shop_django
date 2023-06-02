@@ -5,18 +5,30 @@
     <main>
         <section class="heading">
             <div class="heading__wrapper container">
-                <h2 class="heading__heading">{{ category }}</h2>
+                <h2 class="heading__heading">
+                    {% for category in categories %}
+                        {% if category.slug == category_name %}
+                            {{ category.name }}
+                        {% endif %}
+                    {% endfor %}
+                </h2>
                 <!-- Навигация на bootstrap -->
                 <ul class="nav justify-content-end heading__menu">
                     <li class="nav-item">
                         <a class="nav-link heading__nav-link heading__nav-link-first" aria-current="page"
-                            href="#">home</a>
+                            href="{% url 'choose-sex' %}">
+                            catalog
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link heading__nav-link" href="#">man</a>
+                        <a class="nav-link heading__nav-link" href="{% url 'products' sex.short_name %}">
+                            {{ sex.name }}
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active heading__nav-link heading__active" href="#">new arrivals</a>
+                        <a class="nav-link active heading__nav-link heading__active" href="{% url 'product-list' sex.short_name category_name %}">
+                            {{ category_name }}
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -25,7 +37,7 @@
             <h2 class="visually-hidden">filter</h2>
             <button class="filter__menu" id="filter_menu">filter</button>
                 <svg width="15" height="10" viewBox="0 0 15 10" xmlns="http://www.w3.org/2000/svg" class="filter__menu-icon">
-                    <path d="M0.833333 10H4.16667C4.625 10 5 9.625 5 9.16667C5 8.70833 4.625 8.33333 4.16667 8.33333H0.833333C0.375 8.33333 0 8.70833 0 9.16667C0 9.625 0.375 10 0.833333 10ZM0 0.833333C0 1.29167 0.375 1.66667 0.833333 1.66667H14.1667C14.625 1.66667 15 1.29167 15 0.833333C15 0.375 14.625 0 14.1667 0H0.833333C0.375 0 0 0.375 0 0.833333ZM0.833333 5.83333H9.16667C9.625 5.83333 10 5.45833 10 5C10 4.54167 9.625 4.16667 9.16667 4.16667H0.833333C0.375 4.16667 0 4.54167 0 5C0 5.45833 0.375 5.83333 0.833333 5.83333Z"/>
+                    <path d="M0.833333 10H4.16667C4.625 10 5 9.625 5 9.16667C5 8.70833 4.625 8.33333 4.16667 8.33333H0.833333C0.375 8.33333 0 8.70833 0 9.16667C0 9.625 0.375 10 0.833333 10ZM0 0.833333C0 1.29167 0.375 1.66667 0.833333 1.66667H14.1667C14.625 1.66667 15 1.29167 15 0.833333C15 0.375 14.625 0 14.1667 0H0.833333C0.375 0 0 0.375 0 0.833333ZM0.833333 5.83333H9.16667C9.625 5.83333 10 5.45833 10 5C10 4.54167 9.625 4.16667 9.16667 4.16667H0.833333C0.375 4.16667 0 4.54167 0 5C0 5.45833 0.375 5.83333 0.833333 5.83333Z"></path>
                     </svg>
             <div class="filter__wrapper">
             <ul class="filter__list">
@@ -33,10 +45,11 @@
                 <li class="filter__item filter__item-size">size<i class="fas fa-chevron-down filter__item-arrow"></i>
                     <div class="filter__size">
                         <ul class="filter__size-list">
-                            <li class="filter__size-item"><input type="checkbox" name="size_xs" class="filter__size-checkbox">xs</li>
-                            <li class="filter__size-item"><input type="checkbox" name="size_s" class="filter__size-checkbox">s</li>
-                            <li class="filter__size-item"><input type="checkbox" name="size_m" class="filter__size-checkbox">m</li>
-                            <li class="filter__size-item"><input type="checkbox" name="size_l" class="filter__size-checkbox">l</li>
+                            {% for size in sizes %}
+                            <li class="filter__size-item"><label>
+                                <input type="checkbox" name="size_{{ size }}" class="filter__size-checkbox">
+                            </label>{{ size }}</li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </li>
@@ -46,44 +59,43 @@
                 <div class="filter__nav-wrapper">
                 <button class="filter__menu filter__nav-active" id="filter_close">filter</button>
                 <svg width="15" height="10" viewBox="0 0 15 10" xmlns="http://www.w3.org/2000/svg" class="filter__menu-icon filter__nav-active" id="active_icon">
-                    <path d="M0.833333 10H4.16667C4.625 10 5 9.625 5 9.16667C5 8.70833 4.625 8.33333 4.16667 8.33333H0.833333C0.375 8.33333 0 8.70833 0 9.16667C0 9.625 0.375 10 0.833333 10ZM0 0.833333C0 1.29167 0.375 1.66667 0.833333 1.66667H14.1667C14.625 1.66667 15 1.29167 15 0.833333C15 0.375 14.625 0 14.1667 0H0.833333C0.375 0 0 0.375 0 0.833333ZM0.833333 5.83333H9.16667C9.625 5.83333 10 5.45833 10 5C10 4.54167 9.625 4.16667 9.16667 4.16667H0.833333C0.375 4.16667 0 4.54167 0 5C0 5.45833 0.375 5.83333 0.833333 5.83333Z"/>
+                    <path d="M0.833333 10H4.16667C4.625 10 5 9.625 5 9.16667C5 8.70833 4.625 8.33333 4.16667 8.33333H0.833333C0.375 8.33333 0 8.70833 0 9.16667C0 9.625 0.375 10 0.833333 10ZM0 0.833333C0 1.29167 0.375 1.66667 0.833333 1.66667H14.1667C14.625 1.66667 15 1.29167 15 0.833333C15 0.375 14.625 0 14.1667 0H0.833333C0.375 0 0 0.375 0 0.833333ZM0.833333 5.83333H9.16667C9.625 5.83333 10 5.45833 10 5C10 4.54167 9.625 4.16667 9.16667 4.16667H0.833333C0.375 4.16667 0 4.54167 0 5C0 5.45833 0.375 5.83333 0.833333 5.83333Z"></path>
                     </svg>
                 </div>
                 <ul class="filter__nav-category">
                     <li><a href="#" class="filter__nav-item">
                         <h3 class="filter__nav-heading" id="filter_category">category</h3></a>
                         <ul class="filter__nav-subcategory" id="nav_subcategory">
-                            <li> <a href="#" class="filter__nav-subitem">Accessories</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Bags</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Hoodies & Sweatshirts</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Jackets & Coats</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Polos</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Shirts</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Shoes</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Sweaters & Knits</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">T-Shirts</a></li>
-                            <li> <a href="#" class="filter__nav-subitem">Tanks</a></li>
+                            {% for category in categories %}
+                                {% if sex in category.sex.all %}
+                                <li> <a href="{% url 'product-list' sex.short_name category.slug %}" class="filter__nav-subitem">
+                                    {{ category.name }}
+                                </a></li>
+                                {% endif %}
+                            {% endfor %}
                         </ul>
                     </li>
                     <li><a href="#" class="filter__nav-item">
                         <h3 class="filter__nav-heading" id="filter_brand">brand</h3></a>
                         <ul class="filter__nav-brand">
-                            <li><a href="#" class="filter__nav-subitem">Adidas</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Reebok</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Hoka</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Salomon</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Under Armor</a></li>
+
+                            {% for brand in brands %}
+                                <li><a href="#" class="filter__nav-subitem">
+                                    {{ brand.name }}
+                                </a></li>
+                            {% endfor %}
+
                         </ul></li>
                     <li><a href="#" class="filter__nav-item">
                         <h3 class="filter__nav-heading"  id="filter_designer">designer</h3></a>
                         <ul class="filter__nav-designer">
-                            <li><a href="#" class="filter__nav-subitem">Шанель</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Скиапарелли</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Диор</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Сен-Лоран</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Армани</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Лорен</a></li>
-                            <li><a href="#" class="filter__nav-subitem">Гаравани</a></li>
+
+                            {% for designer in designers %}
+                                <li><a href="#" class="filter__nav-subitem">
+                                    {{ designer.name }}
+                                </a></li>
+                            {% endfor %}
+
                         </ul></li>
                 </ul>
             </nav>
@@ -103,7 +115,7 @@
 
                             <script>
                             function redirectToCart() {
-                                window.location.href = "#";
+                                window.location.href = "{{ request.path }}add_to_cart/?product__pk={{ product.id }}&quantity=1&";
                             }
                             </script>
 
