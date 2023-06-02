@@ -1,0 +1,148 @@
+{% extends 'my_shop/base.html' %}
+{% load static %}
+
+{% block content %}
+    <main>
+        <section class="heading">
+            <div class="heading__wrapper container">
+                <h2 class="heading__heading">{{ category }}</h2>
+                <!-- Навигация на bootstrap -->
+                <ul class="nav justify-content-end heading__menu">
+                    <li class="nav-item">
+                        <a class="nav-link heading__nav-link heading__nav-link-first" aria-current="page"
+                            href="#">home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link heading__nav-link" href="#">man</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active heading__nav-link heading__active" href="#">new arrivals</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="filter container">
+            <h2 class="visually-hidden">filter</h2>
+            <button class="filter__menu" id="filter_menu">filter</button>
+                <svg width="15" height="10" viewBox="0 0 15 10" xmlns="http://www.w3.org/2000/svg" class="filter__menu-icon">
+                    <path d="M0.833333 10H4.16667C4.625 10 5 9.625 5 9.16667C5 8.70833 4.625 8.33333 4.16667 8.33333H0.833333C0.375 8.33333 0 8.70833 0 9.16667C0 9.625 0.375 10 0.833333 10ZM0 0.833333C0 1.29167 0.375 1.66667 0.833333 1.66667H14.1667C14.625 1.66667 15 1.29167 15 0.833333C15 0.375 14.625 0 14.1667 0H0.833333C0.375 0 0 0.375 0 0.833333ZM0.833333 5.83333H9.16667C9.625 5.83333 10 5.45833 10 5C10 4.54167 9.625 4.16667 9.16667 4.16667H0.833333C0.375 4.16667 0 4.54167 0 5C0 5.45833 0.375 5.83333 0.833333 5.83333Z"/>
+                    </svg>
+            <div class="filter__wrapper">
+            <ul class="filter__list">
+                <li class="filter__item">trending now<i class="fas fa-chevron-down filter__item-arrow"></i></li>
+                <li class="filter__item filter__item-size">size<i class="fas fa-chevron-down filter__item-arrow"></i>
+                    <div class="filter__size">
+                        <ul class="filter__size-list">
+                            <li class="filter__size-item"><input type="checkbox" name="size_xs" class="filter__size-checkbox">xs</li>
+                            <li class="filter__size-item"><input type="checkbox" name="size_s" class="filter__size-checkbox">s</li>
+                            <li class="filter__size-item"><input type="checkbox" name="size_m" class="filter__size-checkbox">m</li>
+                            <li class="filter__size-item"><input type="checkbox" name="size_l" class="filter__size-checkbox">l</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="filter__item">price<i class="fas fa-chevron-down filter__item-arrow"></i></li>
+            </ul>
+            <nav class="filter__nav">
+                <div class="filter__nav-wrapper">
+                <button class="filter__menu filter__nav-active" id="filter_close">filter</button>
+                <svg width="15" height="10" viewBox="0 0 15 10" xmlns="http://www.w3.org/2000/svg" class="filter__menu-icon filter__nav-active" id="active_icon">
+                    <path d="M0.833333 10H4.16667C4.625 10 5 9.625 5 9.16667C5 8.70833 4.625 8.33333 4.16667 8.33333H0.833333C0.375 8.33333 0 8.70833 0 9.16667C0 9.625 0.375 10 0.833333 10ZM0 0.833333C0 1.29167 0.375 1.66667 0.833333 1.66667H14.1667C14.625 1.66667 15 1.29167 15 0.833333C15 0.375 14.625 0 14.1667 0H0.833333C0.375 0 0 0.375 0 0.833333ZM0.833333 5.83333H9.16667C9.625 5.83333 10 5.45833 10 5C10 4.54167 9.625 4.16667 9.16667 4.16667H0.833333C0.375 4.16667 0 4.54167 0 5C0 5.45833 0.375 5.83333 0.833333 5.83333Z"/>
+                    </svg>
+                </div>
+                <ul class="filter__nav-category">
+                    <li><a href="#" class="filter__nav-item">
+                        <h3 class="filter__nav-heading" id="filter_category">category</h3></a>
+                        <ul class="filter__nav-subcategory" id="nav_subcategory">
+                            <li> <a href="#" class="filter__nav-subitem">Accessories</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Bags</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Hoodies & Sweatshirts</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Jackets & Coats</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Polos</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Shirts</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Shoes</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Sweaters & Knits</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">T-Shirts</a></li>
+                            <li> <a href="#" class="filter__nav-subitem">Tanks</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" class="filter__nav-item">
+                        <h3 class="filter__nav-heading" id="filter_brand">brand</h3></a>
+                        <ul class="filter__nav-brand">
+                            <li><a href="#" class="filter__nav-subitem">Adidas</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Reebok</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Hoka</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Salomon</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Under Armor</a></li>
+                        </ul></li>
+                    <li><a href="#" class="filter__nav-item">
+                        <h3 class="filter__nav-heading"  id="filter_designer">designer</h3></a>
+                        <ul class="filter__nav-designer">
+                            <li><a href="#" class="filter__nav-subitem">Шанель</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Скиапарелли</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Диор</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Сен-Лоран</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Армани</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Лорен</a></li>
+                            <li><a href="#" class="filter__nav-subitem">Гаравани</a></li>
+                        </ul></li>
+                </ul>
+            </nav>
+        </div>
+        </section>
+        <section class="catalog container">
+            <div class="catalog__grid">
+                {% for product in products %}
+                    <div class="catalog__item">
+                        <div class="catalog__item-imgwrapper">
+                            <img class="catalog__item-img" src="{{ product.preview.url }}" alt="preview">
+                            <div class="catalog__item-overlay"></div>
+                            <button type="button" class="catalog__item-button" onclick="redirectToCart()">
+                                <img src="{% static 'my_shop/img/basket.svg' %}" alt="Добавить в корзину" class="catalog__item-btnimg">
+                                <span class="catalog__item-btntxt">Add to cart</span>
+                            </button>
+
+                            <script>
+                            function redirectToCart() {
+                                window.location.href = "#";
+                            }
+                            </script>
+
+                        </div>
+                        <a href="{% url 'main-page' %}" style="text-decoration: none;">
+                            <h3 class="catalog__item-heading">{{ product.title }}</h3>
+                            <p class="catalog__item-text">{{ product.descr }}</p>
+                            <p class="catalog__item-price">${{ product.price|floatformat:2 }}</p>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            <nav class="catalog__pagination">
+                <ul class="catalog__pagination-list">
+                    <li class="catalog__pagination-arrow">
+                        <a class="catalog__pagination-link" href="#" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left catalog__pagination-icon"></i></a>
+                    </li>
+                    <li class="catalog__pagination-active"><a class="catalog__pagination-link" href="#">1</a></li>
+                    <li class="catalog__pagination-item" aria-current="page">
+                        <a class="catalog__pagination-link" href="#">2</a>
+                    </li>
+                    <li class="catalog__pagination-item">
+                        <a class="catalog__pagination-link" href="#">3</a>
+                    </li>
+                    <li class="catalog__pagination-item">
+                        <a class="catalog__pagination-link" href="#">4</a>
+                    </li>
+                    <li class="catalog__pagination-item">
+                        <a class="catalog__pagination-link" href="#">5</a>
+                    </li>
+                    <li class="catalog__pagination-item">
+                        <a class="catalog__pagination-link" href="#">6</a>
+                    </li>
+                    <li class="catalog__pagination-arrow">
+                        <a class="catalog__pagination-link" href="#"><i class="fas fa-chevron-right catalog__pagination-icon"></i></a>
+                    </li>
+
+                </ul>
+            </nav>
+        </section>
+    </main>
+{% endblock %}
