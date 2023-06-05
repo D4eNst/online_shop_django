@@ -17,6 +17,7 @@ class MainView(View):
 
 
 class ProductListView(ListView):
+    paginate_by = 1
     model = Product
     template_name = 'my_shop/product_list.html'
     context_object_name = 'products'
@@ -35,6 +36,7 @@ class ProductListView(ListView):
         return context
 
     def get_queryset(self):
+        ordering = '-views_cnt'
         self.category_name = self.kwargs.get('category')
         self.sex_name = self.kwargs.get('sex')
         if self.category_name in ['global-search', 'new-arrivals']:
@@ -51,14 +53,11 @@ class ProductListView(ListView):
         brand = self.request.GET.get('brand').split(',') if self.request.GET.get('brand') else []
         designer = self.request.GET.get('designer').split(',') if self.request.GET.get('designer') else []
         search = self.request.GET.get('search', default='').lower().strip()
-        print(size_list, brand, designer, sep='\n')
-        # print(size_list, designer, brand, search, sep='\n')
 
         filters = {
             'brand': brand,
             'designer': designer,
         }
-
         queryset_filter = {
             'is_active': True,
             'productsize__size__name__in': size_list if size_list else self.sizes,
@@ -67,8 +66,8 @@ class ProductListView(ListView):
             queryset_filter['title__icontains'] = search
         else:
             if self.category_name == 'new-arrivals':
-                one_month_ago = timezone.now() - timedelta(days=30)
-                queryset_filter['created_at__gte'] = one_month_ago
+                ordering = '-created_at'
+                queryset_filter['created_at__gte'] = timezone.now() - timedelta(days=30)
             else:
                 queryset_filter['category__slug'] = self.category_name
 
@@ -79,7 +78,7 @@ class ProductListView(ListView):
                     queryset_filter[f'{f}__name__in'] = value
         return Product.objects.filter(
             **queryset_filter
-        ).annotate(total_quantity=Sum('productsize__quantity')).filter(total_quantity__gt=0)
+        ).annotate(total_quantity=Sum('productsize__quantity')).filter(total_quantity__gt=0).order_by(ordering)
 
 
 def choose_sex(request):

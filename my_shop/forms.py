@@ -9,8 +9,11 @@ class ProductForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        product_sex = cleaned_data.get('sex')
-        sex_list = cleaned_data.get('category').sex.all()
+        try:
+            product_sex = cleaned_data.get('sex')
+            sex_list = cleaned_data.get('category').sex.all()
+        except AttributeError:
+            return cleaned_data
 
         if product_sex not in sex_list:
             self.add_error('sex', 'Для указанного пола категория не подходит.')
