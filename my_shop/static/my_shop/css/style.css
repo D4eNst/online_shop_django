@@ -6929,12 +6929,13 @@ readers do not read off random characters that represent icons */
 
 .featured__item_imgwrapper {
   position: relative;
+  min-height: 420px;
   width: 100%;
 }
 
 .featured__item_img {
   width: 100%;
-  height: auto;
+  height: 420px;
 }
 
 .featured__item:hover .featured__item_overlay {

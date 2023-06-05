@@ -36,97 +36,30 @@
             <h2 class="featured__heading">Featured Items</h2>
             <p class="featured__text">Shop for items based on what we featured in this week</p>
             <ul class="featured__list">
-                <li class="featured__item">
-                    <div class="featured__item_imgwrapper">
-                        <img class="featured__item_img" src="img/man_with_backpack.jpg" alt="A man with the backpack">
-                        <div class="featured__item_overlay"></div>
-                        <button type="button" class="featured__item_button">
-                            <img src="img/basket.svg" alt="Добавить в корзину" class="featured__item_btnimg">
-                            <span class="featured__item_btntxt">Add to cart</span>
-                        </button>
+                {% for product in popular_products %}
+                    <div class="featured__item">
+                        <div class="featured__item_imgwrapper">
+                            <img class="featured__item_img" src="{{ product.preview.url }}" alt="preview">
+                            <div class="featured__item_overlay"></div>
+                            <button type="button" class="featured__item_button" onclick="redirectToCart()">
+                                <img src="{% static 'my_shop/img/basket.svg' %}" alt="Добавить в корзину" class="featured__item_btnimg">
+                                <span class="featured__item_btntxt">Add to cart</span>
+                            </button>
+
+                            <script>
+                            function redirectToCart() {
+                                window.location.href = "{{ request.path }}add_to_cart/?product__pk={{ product.id }}&quantity=1&";
+                            }
+                            </script>
+
+                        </div>
+                        <a href="{% url 'main-page' %}" style="text-decoration: none;">
+                            <h3 class="featured__item_heading">{{ product.title }}</h3>
+                            <p class="featured__item_text">{{ product.descr|truncatechars:100 }}</p>
+                            <p class="featured__item_price">${{ product.price|floatformat:2 }}</p>
+                        </a>
                     </div>
-                    <h3 class="featured__item_heading">ellery x m'o capsule</h3>
-                    <p class="featured__item_text">Known for her sculptural takes on traditional tailoring,
-                        Australian
-                        arbiter of cool Kym Ellery teams up with Moda Operandi.</p>
-                    <p class="featured__item_price">$52.00</p>
-                </li>
-                <li class="featured__item">
-                    <div class="featured__item_imgwrapper">
-                        <img class="featured__item_img" src="img/girl_in_dark_suite.jpg" alt="A girl in the dark suite">
-                        <div class="featured__item_overlay"></div>
-                        <button type="button" class="featured__item_button">
-                            <img src="img/basket.svg" alt="Добавить в корзину" class="featured__item_btnimg">
-                            <span class="featured__item_btntxt">Add to cart</span>
-                        </button>
-                    </div>
-                    <h3 class="featured__item_heading">ellery x m'o capsule</h3>
-                    <p class="featured__item_text">Known for her sculptural takes on traditional tailoring,
-                        Australian
-                        arbiter of cool Kym Ellery teams up with Moda Operandi.</p>
-                    <p class="featured__item_price">$52.00</p>
-                </li>
-                <li class="featured__item">
-                    <div class="featured__item_imgwrapper">
-                        <img class="featured__item_img" src="img/man_in_hoody.jpg" alt="Man in hoody">
-                        <div class="featured__item_overlay"></div>
-                        <button type="button" class="featured__item_button">
-                            <img src="img/basket.svg" alt="Добавить в корзину" class="featured__item_btnimg">
-                            <span class="featured__item_btntxt">Add to cart</span>
-                        </button>
-                    </div>
-                    <h3 class="featured__item_heading">ellery x m'o capsule</h3>
-                    <p class="featured__item_text">Known for her sculptural takes on traditional tailoring,
-                        Australian
-                        arbiter of cool Kym Ellery teams up with Moda Operandi.</p>
-                    <p class="featured__item_price">$52.00</p>
-                </li>
-                <li class="featured__item">
-                    <div class="featured__item_imgwrapper">
-                        <img class="featured__item_img" src="img/man_yellow_pants.jpg" alt="A man in the yellow pants">
-                        <div class="featured__item_overlay"></div>
-                        <button type="button" class="featured__item_button">
-                            <img src="img/basket.svg" alt="Добавить в корзину" class="featured__item_btnimg">
-                            <span class="featured__item_btntxt">Add to cart</span>
-                        </button>
-                    </div>
-                    <h3 class="featured__item_heading">ellery x m'o capsule</h3>
-                    <p class="featured__item_text">Known for her sculptural takes on traditional tailoring,
-                        Australian
-                        arbiter of cool Kym Ellery teams up with Moda Operandi.</p>
-                    <p class="featured__item_price">$52.00</p>
-                </li>
-                <li class="featured__item">
-                    <div class="featured__item_imgwrapper">
-                        <img class="featured__item_img" src="img/girl_in_blue_suite.jpg" alt="A girl in the blue suite">
-                        <div class="featured__item_overlay"></div>
-                        <button type="button" class="featured__item_button">
-                            <img src="img/basket.svg" alt="Добавить в корзину" class="featured__item_btnimg">
-                            <span class="featured__item_btntxt">Add to cart</span>
-                        </button>
-                    </div>
-                    <h3 class="featured__item_heading">ellery x m'o capsule</h3>
-                    <p class="featured__item_text">Known for her sculptural takes on traditional tailoring,
-                        Australian
-                        arbiter of cool Kym Ellery teams up with Moda Operandi.</p>
-                    <p class="featured__item_price">$52.00</p>
-                </li>
-                <li class="featured__item">
-                    <div class="featured__item_imgwrapper">
-                        <img class="featured__item_img" src="img/girl_in_stripped_shirt.jpg"
-                            alt="A girl in the green stripped shirt">
-                        <div class="featured__item_overlay"></div>
-                        <button type="button" class="featured__item_button">
-                            <img src="img/basket.svg" alt="Добавить в корзину" class="featured__item_btnimg">
-                            <span class="featured__item_btntxt">Add to cart</span>
-                        </button>
-                    </div>
-                    <h3 class="featured__item_heading">ellery x m'o capsule</h3>
-                    <p class="featured__item_text">Known for her sculptural takes on traditional tailoring,
-                        Australian
-                        arbiter of cool Kym Ellery teams up with Moda Operandi.</p>
-                    <p class="featured__item_price">$52.00</p>
-                </li>
+                {% endfor %}
             </ul>
             <a class="featured__link" href="{% url 'choose-sex' %}">
                 <div class="featured__button">Browse All Product</div></a>

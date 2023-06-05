@@ -122,7 +122,7 @@
                         </div>
                         <a href="{% url 'main-page' %}" style="text-decoration: none;">
                             <h3 class="catalog__item-heading">{{ product.title }}</h3>
-                            <p class="catalog__item-text">{{ product.descr }}</p>
+                            <p class="catalog__item-text">{{ product.descr|truncatechars:200 }}</p>
                             <p class="catalog__item-price">${{ product.price|floatformat:2 }}</p>
                         </a>
                     </div>
