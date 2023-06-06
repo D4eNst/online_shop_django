@@ -147,7 +147,13 @@
                         <a class="catalog__pagination-link" href="{{ current_params }}&page=1">{{ 1 }}</a>
                     </li>
 
-                    {% pattern_range page_obj.number|add:-2 page_obj.number|add:3 as range %}
+                    {% if page_obj.number|add:-2 > 1 %}
+                    <li class="catalog__pagination-item">
+                        ...
+                    </li>
+                    {% endif %}
+
+                    {% pattern_range page_obj.number|add:-1 page_obj.number|add:2 as range %}
                     {% for page in range %}
                     {% if page > 1 and page < paginator.count %}
                     <li class="catalog__pagination-{% if page_obj.number == page %}active{% else %}item{% endif %}">
@@ -155,6 +161,12 @@
                     </li>
                     {% endif %}
                     {% endfor %}
+
+                    {% if page_obj.number|add:2 < paginator.count %}
+                    <li class="catalog__pagination-item">
+                        ...
+                    </li>
+                    {% endif %}
 
                     <li class="catalog__pagination-{% if page_obj.number == paginator.count %}active{% else %}item{% endif %}">
                         <a class="catalog__pagination-link" href="{{ current_params }}&page={{ paginator.count }}">{{ paginator.count }}</a>

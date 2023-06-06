@@ -26,5 +26,4 @@ def urlparams(request):
 
 @register.simple_tag()
 def pattern_range(start, stop):
-    print(range(start, stop))
     return range(start, stop)
