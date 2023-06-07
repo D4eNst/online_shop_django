@@ -86,9 +86,10 @@ class Color(models.Model):
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name='Фотография')
+    product = models.ForeignKey(to='Product', on_delete=models.CASCADE, db_index=True, verbose_name='Фото', null=True)
 
     def __str__(self):
-        return self.photo
+        return "Photo object " + str(self.id)
 
 
 class Brand(models.Model):

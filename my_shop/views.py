@@ -1,14 +1,17 @@
+import random
+
 from django.db.models import Sum
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from datetime import timedelta
-from django.views.generic import View, ListView
-from .models import Product, Brand, Designer, ProductSize, Sex
+from django.views.generic import View, ListView, DetailView
+from .models import Product, Brand, Designer, ProductSize, Sex, Photo, Color, Size
 
 
 class MainView(View):
     def get(self, request):
-        popular_products = Product.objects.filter(is_active=True).order_by('views_cnt')
+        popular_products = Product.objects.filter(is_active=True).order_by('-views_cnt')
         if popular_products.count() > 6:
             popular_products = popular_products[:6]
         context = {
@@ -84,11 +87,41 @@ class ProductListView(ListView):
         ).annotate(total_quantity=Sum('productsize__quantity')).filter(total_quantity__gt=0).order_by(ordering)
 
 
+class ProductDetail(DetailView):
+    model = Product
+    template_name = 'my_shop/product.html'
+    slug_url_kwarg = 'product_slug'
+    context_object_name = 'product_obj'
+    current_size = None
+    current_color = None
+
+    def get_context_data(self, **kwargs):
+        contex = super().get_context_data(**kwargs)
+        photos = Photo.objects.filter(product=self.object)
+        if not photos:
+            photos = [Photo(photo="temp/no_photo.png") for _ in range(3)]
+        contex['photos'] = photos
+
+        contex['sizes'] = Size.objects.filter(productsize__product=self.object).distinct()
+        contex['colors'] = Color.objects.filter(productsize__product=self.object).distinct()
+        contex['popular_products'] = random.choices(Product.objects.all().order_by('-views_cnt')[:50], k=3)
+
+        return contex
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.views_cnt += 1
+        obj.save()
+        return obj
+
+
 def choose_sex(request):
     return render(request, 'my_shop/choose_sex.html')
 
 
 def product_redirect_view(request, sex):
+    if sex == 'detail':
+        raise Http404
     category = 'new-arrivals'
     return redirect('product-list', sex=sex, category=category)
 

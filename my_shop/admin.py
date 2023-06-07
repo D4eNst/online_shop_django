@@ -2,13 +2,19 @@ from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from my_shop.forms import ProductForm
 
-from my_shop.models import Product, Category, Size, Color, Sex, Designer, Brand, ProductSize
+from my_shop.models import Product, Category, Size, Color, Sex, Designer, Brand, ProductSize, Photo
 
 
 class ProductSizeInline(admin.TabularInline):
     model = ProductSize
     extra = 1
     min_num = 1
+
+
+class PhotoInline(admin.TabularInline):
+    model = Photo
+    extra = 1
+    min_num = 0
 
 
 @admin.register(Product)
@@ -20,7 +26,7 @@ class AdminProduct(admin.ModelAdmin):
     list_filter = ('sex', 'category', 'created_at', 'is_active',)
     prepopulated_fields = {'slug': ('title',)}
     autocomplete_fields = ('category', 'brand', 'designer',)
-    inlines = [ProductSizeInline]
+    inlines = [ProductSizeInline, PhotoInline]
 
     form = ProductForm
 
@@ -54,3 +60,13 @@ class AdminSex(admin.ModelAdmin):
 @admin.register(Brand)
 class AdminSex(admin.ModelAdmin):
     search_fields = ('name',)
+
+
+@admin.register(Photo)
+class AdminPhoto(admin.ModelAdmin):
+    search_fields = ('photo',)
+
+
+@admin.register(ProductSize)
+class AdminProductSize(admin.ModelAdmin):
+    pass

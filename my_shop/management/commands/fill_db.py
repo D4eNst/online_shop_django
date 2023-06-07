@@ -35,10 +35,9 @@ class Command(BaseCommand):
         product_sizes = []
         for _ in range(num_records):
             title = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-            slug = title + str(round(time.time(), 4))[-7:]
+            slug = title + str(round(time.time(), 4))[-7:].replace('.', '-')
             descr = ' '.join([''.join(random.choices(string.ascii_lowercase, k=10)) for _ in range(5)])
             price = random.randint(5, 200) + 0.01*random.randint(0, 100)
-            preview = image_path
             is_active = bool(random.randint(0, 2))
             sex = random.choice(sex_list)
             category = random.choice(category_dict[sex.short_name])
