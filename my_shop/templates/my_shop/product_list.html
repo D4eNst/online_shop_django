@@ -21,7 +21,8 @@
                             catalog
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {% if sex %}
+                        <li class="nav-item">
                         <a class="nav-link heading__nav-link" href="{% url 'products' sex.short_name %}">
                             {{ sex.name }}
                         </a>
@@ -31,6 +32,13 @@
                             {{ category_name }}
                         </a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active heading__nav-link heading__active" href="{% url 'product-list' 'g' 'global-search' %}">
+                            {{ category_name }}
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </section>
@@ -103,6 +111,7 @@
         </div>
         </section>
         <section class="catalog container">
+            {% if products %}
             <div class="catalog__grid">
                 {% for product in products %}
                     <div class="catalog__item">
@@ -129,9 +138,12 @@
                     </div>
                 {% endfor %}
             </div>
+                {% else %}
+                    <h3 style="text-align: center;padding-top: 30px; font-size: 20px">Тут ничего нет :(</h3>
+                {% endif %}
 
             <nav class="catalog__pagination">
-            {% if paginator.count > 1 %}
+            {% if paginator.num_pages > 1 %}
 
                 {% urlparams request as current_params %}
                 <ul class="catalog__pagination-list">
@@ -155,21 +167,21 @@
 
                     {% pattern_range page_obj.number|add:-1 page_obj.number|add:2 as range %}
                     {% for page in range %}
-                    {% if page > 1 and page < paginator.count %}
+                    {% if page > 1 and page < paginator.num_pages %}
                     <li class="catalog__pagination-{% if page_obj.number == page %}active{% else %}item{% endif %}">
                         <a class="catalog__pagination-link" href="{{ current_params }}&page={{ page }}">{{ page }}</a>
                     </li>
                     {% endif %}
                     {% endfor %}
 
-                    {% if page_obj.number|add:2 < paginator.count %}
+                    {% if page_obj.number|add:2 < paginator.num_pages %}
                     <li class="catalog__pagination-item">
                         ...
                     </li>
                     {% endif %}
 
-                    <li class="catalog__pagination-{% if page_obj.number == paginator.count %}active{% else %}item{% endif %}">
-                        <a class="catalog__pagination-link" href="{{ current_params }}&page={{ paginator.count }}">{{ paginator.count }}</a>
+                    <li class="catalog__pagination-{% if page_obj.number == paginator.num_pages %}active{% else %}item{% endif %}">
+                        <a class="catalog__pagination-link" href="{{ current_params }}&page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
                     </li>
 
                     <li class="catalog__pagination-arrow">

@@ -9,6 +9,8 @@ from .models import Product, Brand, Designer, ProductSize, Sex
 class MainView(View):
     def get(self, request):
         popular_products = Product.objects.filter(is_active=True).order_by('views_cnt')
+        if popular_products.count() > 6:
+            popular_products = popular_products[:6]
         context = {
             'title': 'Main page',
             'popular_products': popular_products
@@ -17,7 +19,7 @@ class MainView(View):
 
 
 class ProductListView(ListView):
-    paginate_by = 1
+    paginate_by = 12
     model = Product
     template_name = 'my_shop/product_list.html'
     context_object_name = 'products'
@@ -29,7 +31,8 @@ class ProductListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category_name'] = self.category_name
-        context['sex'] = Sex.objects.get(short_name=self.sex_name)
+        if self.category_name != 'global-search':
+            context['sex'] = Sex.objects.get(short_name=self.sex_name)
         context['brands'] = Brand.objects.all()
         context['designers'] = Designer.objects.all()
         context['sizes'] = self.sizes
